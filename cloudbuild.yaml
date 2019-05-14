@@ -1,0 +1,11 @@
+steps:
+- name: 'gcr.io/cloud-builders/go'
+  args: ['install', '.']
+  env: ['PROJECT_ROOT=hwrap']
+- name: 'gcr.io/cloud-builders/go'
+  args: ['build', 'hwrap']
+  env: ['PROJECT_ROOT=hwrap']
+artifacts:
+  objects:
+    location: 'gs://shared-artifact/'
+    paths: ['hwrap']
