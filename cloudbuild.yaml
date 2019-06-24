@@ -1,10 +1,10 @@
 steps:
 - name: 'gcr.io/cloud-builders/go'
-  args: ['install', '.']
-  env: ['PROJECT_ROOT=hwrap']
+  args: ['get', '-u', 'github.com/spf13/cobra/cobra']
+  env: ['PROJECT_ROOT=github.com/koduki/hwrap']
 - name: 'gcr.io/cloud-builders/go'
-  args: ['build', 'hwrap']
-  env: ['PROJECT_ROOT=hwrap']
+  args: ['build', '.']
+  env: ['PROJECT_ROOT=github.com/koduki/hwrap', 'CGO_ENABLED=0']
 artifacts:
   objects:
     location: 'gs://shared-artifact/'
