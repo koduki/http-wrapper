@@ -1,6 +1,9 @@
 README
 =========
 
+This tool make a http-server with any command for FaaS.
+You can run command/script by each http request.
+
 Install
 -------
 
