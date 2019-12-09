@@ -40,7 +40,15 @@ func init() {
 
 func handler(cmd string, args []string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		msg := run(cmd, args)
+		hargs := r.URL.Query().Get("args")
+		fmt.Println("GET PARAM: " + hargs)
+
+		var msg string
+		if len(hargs) == 0 {
+			msg = run(cmd, args)
+		} else {
+			msg = run(cmd, append(args, hargs))
+		}
 		fmt.Fprintf(w, msg)
 	}
 }
