@@ -15,6 +15,8 @@ $ chmod a+x ./hwrap
 Usage
 ----
 
+### help
+
 ```
 Usage:
   hwrap [flags] command
@@ -26,7 +28,7 @@ Flags:
 ./hwrap: accepts 1 arg(s), received 0
 ```
 
-Example:
+### Example of server
 
 ```bash
 $ ./hwrap -p 8080 "ls -l"
@@ -37,6 +39,13 @@ total 20336
 drwxr-xr-x  3 koduki  staff        96 Jun 27 02:05 cmd
 -rwxr-xr-x  1 koduki  staff  10396580 Jun 27 01:54 hwrap
 -rw-r--r--  1 koduki  staff       183 Jun 27 02:05 hwrap.go
+```
+
+### Example of query
+
+```
+$ curl http://localhost:8080/
+$ curl http://localhost:8080/?args="a.txt"
 ```
 
 Build
