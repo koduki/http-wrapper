@@ -1,57 +1,58 @@
-README
-=========
+# code-with-quarkus project
 
-This tool make a http-server with any command for FaaS.
-You can run command/script by each http request.
+This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-Install
--------
+If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
-```bash
-$ wget https://storage.googleapis.com/shared-artifact/hwrap
-$ chmod a+x ./hwrap
+## Running the application in dev mode
+
+You can run your application in dev mode that enables live coding using:
+```shell script
+./mvnw compile quarkus:dev
 ```
 
-Usage
-----
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-### help
+## Packaging and running the application
 
+The application can be packaged using:
+```shell script
+./mvnw package
 ```
-Usage:
-  hwrap [flags] command
+It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-Flags:
-  -h, --help       help for hwrap
-  -p, --port int   port number (default 8080)
-
-./hwrap: accepts 1 arg(s), received 0
-```
-
-### Example of server
-
-```bash
-$ ./hwrap -p 8080 "ls -l"
-port:8080, commad:ls, args:[-l]
-total 20336
--rw-r--r--  1 koduki  staff       368 Jun 27 02:07 README.md
--rw-r--r--  1 koduki  staff       286 Jun 27 02:05 cloudbuild.yaml
-drwxr-xr-x  3 koduki  staff        96 Jun 27 02:05 cmd
--rwxr-xr-x  1 koduki  staff  10396580 Jun 27 01:54 hwrap
--rw-r--r--  1 koduki  staff       183 Jun 27 02:05 hwrap.go
+If you want to build an _über-jar_, execute the following command:
+```shell script
+./mvnw package -Dquarkus.package.type=uber-jar
 ```
 
-### Example of query
+The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
-```
-$ curl http://localhost:8080/
-$ curl http://localhost:8080/?args="a.txt"
+## Creating a native executable
+
+You can create a native executable using: 
+```shell script
+./mvnw package -Pnative
 ```
 
-Build
--------
-
-```bash
-$ go clean
-$ go build hwrap.go
+Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+```shell script
+./mvnw package -Pnative -Dquarkus.native.container-build=true
 ```
+
+You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html.
+
+## Related guides
+
+- RESTEasy JAX-RS ([guide](https://quarkus.io/guides/rest-json)): REST endpoint framework implementing JAX-RS and more
+
+## Provided examples
+
+### RESTEasy JAX-RS example
+
+REST is easy peasy with this Hello World RESTEasy resource.
+
+[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)

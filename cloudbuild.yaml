@@ -1,11 +1,9 @@
 steps:
-- name: 'gcr.io/cloud-builders/go'
-  args: ['get', '-u', 'github.com/spf13/cobra/cobra']
-  env: ['PROJECT_ROOT=github.com/koduki/hwrap']
-- name: 'gcr.io/cloud-builders/go'
-  args: ['build', '.']
-  env: ['PROJECT_ROOT=github.com/koduki/hwrap', 'CGO_ENABLED=0']
+- name: 'gcr.io/support-tools-299121/graalvm'
+  args: ['./mvnw', 'package', '-Pnative']
+- name: 'bash'
+  args: ['mv', 'target/http-wrapper-*-SNAPSHOT-runner', 'hwrap']
 artifacts:
   objects:
-    location: 'gs://shared-artifact/'
+    location: 'gs://nklab-artifacts/'
     paths: ['hwrap']
