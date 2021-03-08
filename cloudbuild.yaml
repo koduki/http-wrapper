@@ -1,8 +1,10 @@
 steps:
-- name: 'gcr.io/support-tools-299121/graalvm'
+- name: 'gcr.io/support-tools-299121/graalvm-builder'
   args: ['./mvnw', 'package', '-Pnative']
 - name: 'bash'
-  args: ['mv', 'target/http-wrapper-*-SNAPSHOT-runner', 'hwrap']
+  args: ['ls', 'target']
+- name: 'bash'
+  args: ['mv', 'target/http-wrapper-0.2-SNAPSHOT-runner', 'hwrap']
 artifacts:
   objects:
     location: 'gs://nklab-artifacts/'

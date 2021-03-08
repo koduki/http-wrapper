@@ -1,4 +1,54 @@
-# code-with-quarkus project
+HTTP-Wrapper for command
+=========
+
+This tool wrap commadn/script as web application for Serverlss/CaaS.
+
+The command or script are executed every http requests. It makes easy to use `Cloud Run` as micro batch platform.
+
+Install
+-------
+
+```bash
+$ wget https://storage.googleapis.com/nklab-artifacts/hwrap
+$ chmod a+x ./hwrap
+```
+
+Usage
+----
+
+### help
+
+```
+Usage:
+  hwrap [flags] command
+
+Flags:
+  -h, --help       help for hwrap
+  -p, --port int   port number (default 8080)
+
+./hwrap: accepts 1 arg(s), received 0
+```
+
+### Example of server
+
+```bash
+$ ./hwrap -Dhwrap.cmd "ls, -l"
+```
+
+### Example of query
+
+```
+$ curl http://localhost:8080/
+$ curl -v http://localhost:8080/?args=/
+```
+
+Build
+-------
+
+```bash
+$ ./mvnw package -Pnative -Dquarkus.native.container-build=true
+```
+
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
