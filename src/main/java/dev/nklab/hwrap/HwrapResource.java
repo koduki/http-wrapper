@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,7 +21,8 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/")
-public class HTWResource {
+public class HwrapResource {
+    private static final Logger LOGGER = Logger.getLogger("htwrp");
 
     @ConfigProperty(name = "hwrap.cmd")
     String cmd;
@@ -30,24 +33,23 @@ public class HTWResource {
         if (params == null) {
             params = "";
         }
-
-        System.out.print(cmd.replaceAll(",", ""));
-        System.out.println(" " + params.replaceAll(",", ""));
+        LOGGER.info(cmd.replaceAll(",", " ") + " " + params.replaceAll(",", " "));
 
         var cmds = Arrays.stream(cmd.split(",")).map(x -> x.strip()).toArray(String[]::new);
         var args = Arrays.stream(params.split(",")).map(x -> x.strip()).toArray(String[]::new);
 
-        var r = execCommand(concat(cmds, args));
-
-        System.out.println(r.get("stdout"));
-
-        String err = r.get("stderr");
+        var r = execCommand(
+            s -> System.out.println(s), 
+            s -> System.err.println(s), 
+            concat(cmds, args)
+        );
 
         if (r.get("status").equals("0")) {
             return Response.ok("success").build();
         } else {
-            System.err.println(err);
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(err).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                            .entity(r.get("stderr"))
+                            .build();
         }
     }
 
@@ -66,23 +68,27 @@ public class HTWResource {
         return xs;
     }
 
-    private Map<String, String> execCommand(String... cmds) throws IOException, InterruptedException {
+    private Map<String, String> execCommand(Consumer<String> stdProc, Consumer<String> errProc, String... cmds)
+            throws IOException, InterruptedException {
         var result = new HashMap<String, String>();
         var proc = Runtime.getRuntime().exec(cmds);
 
-        result.put("stdout", toString(proc.getInputStream()));
-        result.put("stderr", toString(proc.getErrorStream()));
+        result.put("stdout", read(proc.getInputStream(), (s) -> System.out.println(s)));
+        result.put("stderr", read(proc.getErrorStream(), (s) -> System.err.println(s)));
         result.put("status", Integer.toString(proc.waitFor()));
 
         return result;
     }
 
-    private String toString(InputStream input) throws IOException {
-        try {
-            return new BufferedReader(new InputStreamReader(input)).lines()
-                    .collect(Collectors.joining(System.lineSeparator()));
-        } finally {
-            input.close();
+    private String read(InputStream input, Consumer<String> callback) {
+        var sb = new StringBuilder();
+        try (Stream<String> s = new BufferedReader(new InputStreamReader(input)).lines()) { // 自動close
+            s.map((l) -> {
+                sb.append(l);
+                sb.append(System.lineSeparator());
+                return l;
+            }).forEach(callback);
         }
+        return sb.toString();
     }
 }
