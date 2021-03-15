@@ -29,6 +29,13 @@ public class HwrapResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
+    @Path("/healthcheck")
+    public Response healthcheck() throws Exception {
+        return Response.ok("cmd: " + cmd).build();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
     public Response exec(@QueryParam("args") String params) throws Exception {
         if (params == null) {
             params = "";
