@@ -1,8 +1,11 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -20,12 +23,30 @@ type (
 
 var cmd string
 
-func main() {
-	cmd = "echo"
+var (
+	optPort = flag.Int("p", 8080, "port number")
+)
 
+func main() {
+	ParseArgs()
 	e := echo.New()
 	Route(e)
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + strconv.Itoa(*optPort)))
+}
+
+func ParseArgs() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "usage: hwrap [flags] command\n")
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+	if len(flag.Args()) > 0 {
+		cmd = flag.Args()[0]
+	} else {
+		cmd = "echo"
+	}
+	fmt.Printf("command: %s, port: %d\n", cmd, *optPort)
 }
 
 func Route(e *echo.Echo) {
@@ -36,7 +57,7 @@ func Route(e *echo.Echo) {
 		})
 	})
 
-	e.GET("/ls", func(c echo.Context) error {
+	e.GET("/", func(c echo.Context) error {
 		hargs := c.QueryParam("args")
 		args := strings.Split(hargs, ",")
 
