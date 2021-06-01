@@ -6,19 +6,19 @@ import (
 	"os/exec"
 )
 
-func Exec() string {
-	cmd := exec.Command("ls", "-l")
+func Exec(command string, args []string) string {
+	cmd := exec.Command(command, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 
-	var msg string
+	var status string
 	if err == nil {
-		msg = "success"
+		status = "success"
 	} else {
-		msg = "error"
+		status = "error"
 		fmt.Println(err)
 	}
 
-	return msg
+	return status
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"hwrap/internal/command"
@@ -17,7 +18,11 @@ type (
 	}
 )
 
+var cmd string
+
 func main() {
+	cmd = "echo"
+
 	e := echo.New()
 	Route(e)
 	e.Logger.Fatal(e.Start(":8080"))
@@ -32,18 +37,16 @@ func Route(e *echo.Echo) {
 	})
 
 	e.GET("/ls", func(c echo.Context) error {
-		args := c.QueryParam("args")
-		f(args)
+		hargs := c.QueryParam("args")
+		args := strings.Split(hargs, ",")
 
-		fmt.Println(command.Exec())
+		fmt.Printf("cmd: %s, args: %s\n", cmd, args)
+		status := command.Exec(cmd, args)
+		fmt.Printf("status: %s\n", status)
 
 		return c.JSON(http.StatusOK, Response{
-			Message: "ls2",
+			Message: status,
 			Date:    time.Now().Format("2006-01-02T00:00:00"),
 		})
 	})
-}
-
-func f(args string) {
-	fmt.Println(args)
 }
