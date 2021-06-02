@@ -1,0 +1,9 @@
+steps:
+- name: golang
+  args: ['go', 'mod', 'download']
+- name: golang
+  args: ['go', 'build', '.']
+artifacts:
+  objects:
+    location: 'gs://nklab-artifacts/'
+    paths: ['hwrap']
