@@ -1,7 +1,9 @@
 steps:
 - name: golang
+  id: Init
   args: ['go', 'mod', 'download']
 - name: golang
+  id: Build
   args: ['go', 'build', '.']
 artifacts:
   objects:
