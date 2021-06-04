@@ -65,7 +65,12 @@ func Route(e *echo.Echo) {
 		status := command.Exec(cmd, args)
 		fmt.Printf("status: %s\n", status)
 
-		return c.JSON(http.StatusOK, Response{
+		http_status := http.StatusOK
+		if status == "error" {
+			http_status = http.StatusInternalServerError
+		}
+
+		return c.JSON(http_status, Response{
 			Message: status,
 			Date:    time.Now().Format("2006-01-02T00:00:00"),
 		})
