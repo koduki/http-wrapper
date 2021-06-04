@@ -24,7 +24,7 @@ Usage
 ### help
 
 ```
-$ ./releases/main -h
+$ hwrap -h
 usage: hwrap [flags] command
   -p int
         port number (default 8080)
@@ -35,7 +35,7 @@ usage: hwrap [flags] command
 Run server
 
 ```bash
-$ ./releases/main -p 5000 ls
+$ hwrap -p 5000 ls
 command: ls, port: 5000
 .
 .
