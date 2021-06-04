@@ -6,6 +6,10 @@ This tool wraps any command with a simple http-server for FaaS/CaaS.
 GCP Cloud Run is very useful tool to execute small job and it can use any command with docker. But the http-server is required as endpoint of Cloud Run. It is a little bit tire to create web endpoint each time.
 `hwrap` allows you to wrap your any command without any scripts. Just type `hwrap {your commadn}`.
 
+**Caution:**
+
+You SHOULD not expose this application to the internet directly to avoid OS command injection. This tool is only for backend. If you want to publish it, please deploy something frontend and ristrict acceptable paramaters.
+
 Install
 -------
 
