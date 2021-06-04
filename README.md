@@ -20,7 +20,7 @@ Usage
 ### help
 
 ```
-./releases/main -h
+$ ./releases/main -h
 usage: hwrap [flags] command
   -p int
         port number (default 8080)
@@ -31,7 +31,7 @@ usage: hwrap [flags] command
 Run server
 
 ```bash
-❯ ./releases/main -p 5000 ls
+$ ./releases/main -p 5000 ls
 command: ls, port: 5000
 .
 .
@@ -42,7 +42,7 @@ command: ls, port: 5000
 Try to access by curl.
 
 ```bash
-curl "localhost:5000?args=-l"
+$ curl "localhost:5000?args=-l"
 {"message":"success","date":"2021-06-03T00:00:00"}
 ```
 
@@ -75,14 +75,14 @@ $ go mod download
 ### run for dev
 
 ```bash
-go run main.go -p 5000
+$ go run main.go -p 5000
 ```
 
 or
 
 ```bash
-go get -u github.com/cosmtrek/air
-air
+$ go get -u github.com/cosmtrek/air
+$ air
 ```
 
 ### build
