@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"hwrap/internal/command"
+	"hwrap/cmd/command"
 
 	"github.com/labstack/echo/v4"
 )
